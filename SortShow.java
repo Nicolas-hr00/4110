@@ -1,299 +1,383 @@
-/**
- *
- * @author Mahmoud Algharbawi and Nicholas Hidalgo
- */
-
-//importing the libraries that will be needed in this program
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.Random;
 
-//the class with button and main method
-public class SortGUI {
+//The class that has all the sorts in it
+public class SortShow extends JPanel { 
 
-	// import javax.swing.JFrame;
-	//a variable that holds the amount of time for the bubble sort takes to execute
-	public static double bubbleTime = 0.0;
-	//a variable that holds the amount of time for the selection sort takes to execute
-	public static double selectionTime = 0.0;
-	//a variable that holds the amount of time for the recursive merge sort takes to execute
-	public static double rmergeTime = 0.0;
-	//a variable that holds the amount of time for the iterative merge sort takes to execute
-	public static double imergeTime = 0.0;
-	//Boolean variable that is made to keep track whether or not the bubble sort has already been used
-	public boolean Bubble_Done = false;
-	//Boolean variable that is made to keep track whether or not the selection sort has already been used
-	public boolean Selection_Done = false;
-	//Boolean variable that is made to keep track whether or not the recursive merge sort has already been used
-	public boolean Recersive_Merge_Done = false;
-	//Boolean variable that is made to keep track whether or not the iterative merge sort has already been used
-	public boolean Iterative_Merge_Done = false;
-	//Making a object from the class SortShow
-	SortShow sortArea = new SortShow();
+	
+		// An array to hold the lines_lengths to be sorted
+		public int[] lines_lengths;
+		//The amount of lines needed
+		public final int total_number_of_lines = 160;
+		 // An array to holds the scrambled lines_lengths
+		public int[] scramble_lines;
+		//A temp Array that is used later for sorts
+		public int[] tempArray;
+		
+		//the default constructor for the SortShow class
+		public SortShow(){
+			//assigning the size for the lines_lengths below
+			lines_lengths = new int[total_number_of_lines];
+			for(int i = 0; i < total_number_of_lines; i++) 
+				lines_lengths[i] =  i+5;
+			
+		}
+		
 
-	//Default constructor for SortGUI
-	public SortGUI() {
-		//making a MyScreen object
+		//A method that scrambles the lines
+		public void scramble_the_lines(){
+			//A random generator
+			Random num = new Random(); 
+			//Randomly switching the lines
+			for(int i = 0; i < total_number_of_lines; i++){
+				//getting a random number using the nextInt method (a number between 0 to i + 1)
+				int j = num.nextInt(i + 1); 
+				//swapping The element at i and j 
+				swap(i, j);
+			}
+			//assigning the size for the scramble_lines below
+			scramble_lines = new int[total_number_of_lines];
+			//copying the now scrambled lines_lengths array into the scramble_lines array 
+			//to store for reuse for other sort methods
+			//so that all sort methods will use the same scrambled lines for fair comparison 
+			for (int i = 0; i < total_number_of_lines; i++)
+			{
+				scramble_lines[i] = lines_lengths[i];
+			}
+			//Drawing the now scrambled lines_lengths
+			paintComponent(this.getGraphics());
+		}
+		
+		//Swapping method that swaps two elements in the lines_lengths array
+		public void swap(int i, int j){
+			//storing the i element in lines_lengths in temp
+			int temp = lines_lengths[i];
+			//giving i element in lines_lengths the value of j element in lines_lengths
+			lines_lengths[i] = lines_lengths[j];
+			//giving j element in lines_lengths the value of temp
+			lines_lengths[j] = temp;
+		}
+		
+		//The selectionSort method
+		public void SelectionSort() {
+			//getting the date and time when the selection sort starts
+			Calendar start = Calendar.getInstance();
+			//Using the selection sort to lines_lengths sort the array
 
-		// You need to adjust the following values to your Screen dimensions
+			//You need to complete this part.
+			tempArray = new int[total_number_of_lines]; //asisgning the size of the temp array
+//			int n = lines_lengths; //total number of lines
+//
+			for (int i = 0; i < total_number_of_lines - 1; i++) {
+				int minIndex = getIndexOfSmallest(i, total_number_of_lines - 1);
+				swap(i, minIndex );
+				paintComponent(this.getGraphics());
+			}
 
-		MyScreen screen = new MyScreen();
-		//Setting a title to the GUI window
-		screen.setTitle("Assignment-1 by Mahmoud Algharbawi and Nicholas Hidalgo");
-		//setting the size of the window
-		screen.setSize(1200+sortArea.total_number_of_lines, 1000);
-		//the operation when the frame is closed
-		screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//is set to true to display the frame
-		screen.setVisible(true);
-	}
-	//A public class that extends JFrame
-	public class MyScreen extends JFrame {
-		//making a scramble button with a text "Scramble Lines" on it
-		JButton scramble_button = new JButton("Scramble Lines");
-		//making a bubble button with a text "Bubble on it"
-		JRadioButton bubble = new JRadioButton("Bubble");
-		//making a selection button with a text "Selection" on it
-		JRadioButton selection = new JRadioButton("Selection");
-		//making a recursive merge button with a text "Merge Recursive" on it
-		JRadioButton rmerge = new JRadioButton("Merge Recursive");
-		//making a iterative merge button with a text "Merge Iterative" on it
-		JRadioButton imerge = new JRadioButton("Merge Iterative");
+			//getting the date and time when the selection sort ends
+			Calendar end = Calendar.getInstance();
+			//getting the time it took for the selection sort to execute 
+			//subtracting the end time with the start time
+			SortGUI.selectionTime = end.getTime().getTime() - start.getTime().getTime();
 
-		//making a reset button with a text "Reset" on it
-		JRadioButton reset = new JRadioButton("Reset");
-		//A label that displays the time it took for the bubble sort to execute
-		JLabel bubble_time_label = new JLabel("Bubble Time");
-		JLabel bubble_time_taken = new JLabel("");
-		//A label that displays the time it took for the Selection sort took to execute
-		JLabel selection_time_label = new JLabel("Selection Time");
-		JLabel selection_time_taken = new JLabel("");
-		//A label that displays the time it took for the recursive merge sort took to execute
-		JLabel rmerge_time_label = new JLabel("Merge-Rec Time");
-		JLabel rmerge_time_taken = new JLabel("");
-		//A label that displays the time it took for the iterative merge sort took to execute
-		JLabel imerge_time_label = new JLabel("Merge-Ita Time");
-		JLabel imerge_time_taken = new JLabel("");
+			//this method gets the smallest element in the array of lines_lengths
+		}
+	public int getIndexOfSmallest(int first, int last){
 
-		//the default constructor for the class MyScreen
-		public MyScreen() {
-			// Panel where sorted lines_lengths will displayed
-			//The time displayed for bubble sort will be the colour red
-			bubble_time_taken.setForeground(Color.RED);
-			//The time displayed for selection sort will be the colour red
-			selection_time_taken.setForeground(Color.RED);
-			//The time displayed for recursive merge sort will be the colour red
-			rmerge_time_taken.setForeground(Color.RED);
-			//The time displayed for iterative merge sort will be the colour red
-			imerge_time_taken.setForeground(Color.RED);
-			//The time displayed for bubble sort will be the colour red
-			bubble.setForeground(Color.BLUE);
-			//The selection button text will be the colour blue
-			selection.setForeground(Color.BLUE);
-			//The recursive merge button text will be the colour blue
-			rmerge.setForeground(Color.BLUE);
-			//The iterative merge button text will be the colour blue
-			imerge.setForeground(Color.BLUE);
-			//The scramble button's text will be blue
-			scramble_button.setForeground(Color.BLUE);
-			//setting the font of scramble button
-			scramble_button.setFont(new Font("Arial", Font.BOLD, 15));
-
-			//A Panel to hold the radio_button_selection and set the GridLayout
-			JPanel radio_button_selection_Panel = new JPanel(new GridLayout(5, 1, 3, 3));
-
-			//Adding the bubble button to the radio_button_selection_Panel
-			radio_button_selection_Panel.add(bubble);
-			//Adding the selection button to the radio_button_selection_Panel
-			radio_button_selection_Panel.add(selection);
-			//Adding the recursive merge button to the radio_button_selection_Panel
-			radio_button_selection_Panel.add(rmerge);
-			//Adding the iterative merge button to the radio_button_selection_Panel
-			radio_button_selection_Panel.add(imerge);
-			//Adding the reset button to the radio_button_selection_Panel
-			radio_button_selection_Panel.add(reset);
-			//giving the radio_button_selection_Panel a border with a title
-			radio_button_selection_Panel.setBorder(new javax.swing.border.TitledBorder("Sort Algorithms"));
-
-			//A Panel to hold the time_Panel and set the GridLayout
-			JPanel time_Panel = new JPanel(new GridLayout(8, 1, 3, 3));
-			//Adding the bubble_time_label to the time_Panel
-			time_Panel.add(bubble_time_label);
-			//Adding the bubble_time_taken to the time_Panel
-			time_Panel.add(bubble_time_taken);
-			//Adding the selection_time_label to the time_Panel
-			time_Panel.add(selection_time_label);
-			//Adding the selection_time_taken to the time_Panel
-			time_Panel.add(selection_time_taken);
-			//Adding the rmerge_time_label to the time_Panel
-			time_Panel.add(rmerge_time_label);
-			//Adding the rmerge_time_taken to the time_Panel
-			time_Panel.add(rmerge_time_taken);
-			//Adding the imerge_time_label to the time_Panel
-			time_Panel.add(imerge_time_label);
-			//Adding the imerge_time_taken to the time_Panel
-			time_Panel.add(imerge_time_taken);
-
-			//A Panel to hold the buttons_area_Panel and set the GridLayout
-			//This buttons_area_Panel will hold scrambleButton, radio_button_selection and the time_Panel
-			JPanel buttons_area_Panel = new JPanel(new GridLayout(5, 1, 8, 5));
-			//adding scramble_button to the buttons_area_Panel
-			buttons_area_Panel.add(scramble_button);
-			//adding radio_button_selection_Panel to the buttons_area_Panel
-			buttons_area_Panel.add(radio_button_selection_Panel);
-			//adding time_Panel to the buttons_area_Panel
-			buttons_area_Panel.add(time_Panel);
-
-			//placing the buttons_area_Panel to the east side of the window
-			add(buttons_area_Panel, BorderLayout.EAST);
-			//placing the sortArea object in the center of the window
-			add(sortArea, BorderLayout.CENTER);
-			//setting all booleans to false
-			Set_Available_Chooses(false, false, false, false,false);
-
-			//The following code is for creating a listener for each GUI element
-
-			//Creating an action listener for scramble button
-			//This button will be used to scramble the lines in a random way
-			//this same scrambled lines will be used for all threes sort methods used in this program
-			scramble_button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					// Scrambling the lines_lengths array
-					sortArea.scramble_the_lines();
-					//Since it has already been clicked, it will no longer be enabled
-					scramble_button.setEnabled(false);
-					//setting all booleans true except for reset
-					Set_Available_Chooses(true, true, true, false,true);
-				}
-			});
-
-			//Creating an action listener for bubble button
-			bubble.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					//Sorting the array in the selection sort method
-					sortArea.BubbleSort();
-					//Selection sort has finished/been clicked
-					Bubble_Done = true;
-					//The amount of time taken for selection sort took
-					bubble_time_taken.setText((bubbleTime / 1000) + " Seconds");
-					//setting all booleans false except for reset
-					Set_Available_Chooses(false, false, false, true,true);
-				}
-			});
-
-			//Creating an action listener for selection button
-			selection.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					//Sorting the array in the selection sort method
-					sortArea.SelectionSort();
-					//Selection sort has finished/been clicked
-					Selection_Done = true;
-					//The amount of time taken for selection sort took
-					selection_time_taken.setText((selectionTime / 1000) + " Seconds");
-					//setting all booleans false except for reset
-					Set_Available_Chooses(false, false, false, true,false);
-				}
-			});
-
-			//Creating an action listener for recursive merge button
-			rmerge.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					//Sorting the array in the recursive merge sort method
-					sortArea.R_MergeSort();
-					//The amount of time taken for recursive merge sort took
-					rmerge_time_taken.setText((rmergeTime / 1000) + " Seconds");
-					//recursive merge sort has finished/been clicked
-					Recersive_Merge_Done = true;
-					//setting all booleans false except for reset
-					Set_Available_Chooses(false, false, false, true,false);
-				}
-			});
-
-			//Creating an action listener for iterative merge button
-			imerge.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					//Sorting the array in the iterative merge sort method
-					sortArea.I_MergeSort();
-					//The amount of time taken for iterative merge sort took
-					imerge_time_taken.setText((imergeTime / 1000) + " Seconds");
-					//iterative merge sort has finished/been clicked
-					Iterative_Merge_Done = true;
-					//setting all booleans false except for reset
-					Set_Available_Chooses(false, false, false, true,false);
-				}
-			});
-
-			//Creating an action listener for reset button
-			reset.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					//disabling reset since it was clicked
-					reset.setEnabled(false);
-					//reseting the lines_lengths to its scrambled lines
-					sortArea.reset();
-
-
-					//need to update if statements
-
-
-					//There are many different combinations of what could be clicked
-					//The following code below covers all possibilities
-					//FOr the following use the same comments as above
-					if (Selection_Done && Recersive_Merge_Done && Iterative_Merge_Done && Bubble_Done) {
-						//
-						scramble_button.setEnabled(true);
-						Bubble_Done = false;
-						Recersive_Merge_Done = false;
-						Iterative_Merge_Done = false;
-						Selection_Done = false;
-						Set_Available_Chooses(false, false, false, false,false);
-						bubble_time_taken.setText("");
-						selection_time_taken.setText("");
-						rmerge_time_taken.setText("");
-						imerge_time_taken.setText("");
-
-					} else if (Recersive_Merge_Done && Iterative_Merge_Done) {
-						Set_Available_Chooses(true, false, false, false,false);
-
-					} else if (Selection_Done && Recersive_Merge_Done) {
-
-						Set_Available_Chooses(false, false, true, false,false);
-
-					} else if (Selection_Done && Iterative_Merge_Done) {
-						Set_Available_Chooses(false, true, false, false,false);
-
-					} else if (Selection_Done) {
-						Set_Available_Chooses(false, true, true, false,false);
-
-					} else if (Recersive_Merge_Done) {
-						Set_Available_Chooses(true, false, true, false,false);
-
-					} else {
-						Set_Available_Chooses(true, true, false, false,false);
-
-					}
-				}
-			});
-
+		int minIndex = lines_lengths[first];
+		int indexOfMin = first;
+		for (int i = first + 1; i <= last; i++) {
+			if (lines_lengths[i] < minIndex) {
+				minIndex = lines_lengths[i];
+				indexOfMin = i;
+			}
 		}
 
-		//A method that sets if the button are enabled or disabled
-		public void Set_Available_Chooses(boolean selection_state, boolean rmerge_state, boolean imerge_state,
-										  boolean reset_state,boolean bubble_state) {
-			this.bubble.setEnabled(bubble_state);
-			this.selection.setEnabled(selection_state);
-			this.rmerge.setEnabled(rmerge_state);
-			this.imerge.setEnabled(imerge_state);
-			this.reset.setEnabled(reset_state);
+		return indexOfMin; //modify this line
+	}
+
+
+
+	///////////////////////////////////////////////////////////////////////////////////
+		
+		//recursive merge sort method
+		public void R_MergeSort(){
+			//getting the date and time when the recursive merge sort starts
+			Calendar start = Calendar.getInstance();
+			//assigning the size for the tempArray below
+
+			//You need to complete this part.
+			Calendar end = Calendar.getInstance();
+			//getting the time it took for the iterative merge sort to execute
+			//subtracting the end time with the start time
+	        SortGUI.rmergeTime = end.getTime().getTime() - start.getTime().getTime();
+			
 		}
+		
+		//recursive merge sort method
+		public void R_MergeSort(int first, int last){
+			if(first < last){
+
+				//You need to complete this part.
+
+				//Causing a delay for 10ms
+				delay(10); 
+			}
+		}
+
+		
+		//recursive merge sort method
+		public void R_Merge(int first, int mid, int last){
+
+			//You need to complete this part.
+				
+		}
+		
+		//
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+		
+		//iterative merge sort method
+		public void I_MergeSort()
+		{
+		//getting the date and time when the iterative merge sort starts
+		Calendar start = Calendar.getInstance();
+		//assigning the size for the tempArray below
+		tempArray = new int[total_number_of_lines];
+		//saving the value of total_number_of_lines
+		int beginLeftovers = total_number_of_lines;
+
+
+		for (int segmentLength = 1; segmentLength <= total_number_of_lines/2; segmentLength = 2*segmentLength)
+		{
+			beginLeftovers = I_MergeSegmentPairs(total_number_of_lines, segmentLength);
+			int endSegment = beginLeftovers + segmentLength - 1;
+			if (endSegment < total_number_of_lines - 1)
+			{
+			I_Merge(beginLeftovers, endSegment, total_number_of_lines - 1);
+			}
+		}
+
+		// merge the sorted leftovers with the rest of the sorted array
+		if (beginLeftovers < total_number_of_lines) {
+			I_Merge(0, beginLeftovers-1, total_number_of_lines - 1);
+		}
+		//getting the date and time when the iterative merge sort ends
+		Calendar end = Calendar.getInstance();
+		//getting the time it took for the iterative merge sort to execute
+		//subtracting the end time with the start time
+	    SortGUI.imergeTime = end.getTime().getTime() - start.getTime().getTime();
 	}
 
-	//The main method
-	public static void main(String[] args) {
-		//initialize the class
-		SortGUI sort_GUI = new SortGUI();
+	// Merges segments pairs (certain length) within an array 
+	public int I_MergeSegmentPairs(int l, int segmentLength)
+	{
+		//The length of the two merged segments 
 
+		//You suppose  to complete this part (Given).
+		int mergedPairLength = 2 * segmentLength;
+		int numberOfPairs = l / mergedPairLength;
+
+		int beginSegment1 = 0;
+		for (int count = 1; count <= numberOfPairs; count++)
+		{
+			int endSegment1 = beginSegment1 + segmentLength - 1;
+
+			int beginSegment2 = endSegment1 + 1;
+			int endSegment2 = beginSegment2 + segmentLength - 1;
+			I_Merge(beginSegment1, endSegment1, endSegment2);
+
+			beginSegment1 = endSegment2 + 1;
+			//redrawing the lines_lengths
+			paintComponent(this.getGraphics());
+			//Causing a delay for 10ms
+			delay(10);
+		}
+		// Returns index of last merged pair
+		return beginSegment1;
+		//return 1;//modify this line
+	}
+///////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////
+
+	//Bubble Sort Method
+	public void BubbleSort() {
+		//getting the date and time when the bubblee sort starts
+		Calendar start = Calendar.getInstance();
+		//assigning the size for the tempArray below
+
+
+
+
+
+
+		//You need to complete this part.
+		Calendar end = Calendar.getInstance();
+		//getting the time it took for the bubble sort to execute
+		//subtracting the end time with the start time
+		SortGUI.rmergeTime = end.getTime().getTime() - start.getTime().getTime();
 	}
 
-}
+
+
+
+
+
+
+
+
+	///////////////////////////////////////////////////////////////
+	public void I_Merge(int first, int mid, int last)
+	{
+		//You suppose  to complete this part (Given).
+		// Two adjacent sub-arrays
+		int beginHalf1 = first;
+		int endHalf1 = mid;
+		int beginHalf2 = mid + 1;
+		int endHalf2 = last;
+
+		// While both sub-arrays are not empty, copy the
+		// smaller item into the temporary array
+		int index = beginHalf1; // Next available location in tempArray
+		for (; (beginHalf1 <= endHalf1) && (beginHalf2 <= endHalf2); index++)
+		{
+			// Invariant: tempArray[beginHalf1..index-1] is in order
+			if (lines_lengths[beginHalf1] < lines_lengths[beginHalf2])
+			{
+				tempArray[index] = lines_lengths[beginHalf1];
+				beginHalf1++;
+			}
+			else
+			{
+				tempArray[index] = lines_lengths[beginHalf2];
+				beginHalf2++;
+			}
+		}
+		//redrawing the lines_lengths
+		paintComponent(this.getGraphics());
+
+		// Finish off the nonempty sub-array
+
+		// Finish off the first sub-array, if necessary
+		for (; beginHalf1 <= endHalf1; beginHalf1++, index++)
+			// Invariant: tempArray[beginHalf1..index-1] is in order
+			tempArray[index] = lines_lengths[beginHalf1];
+
+		// Finish off the second sub-array, if necessary
+		for (; beginHalf2 <= endHalf2; beginHalf2++, index++)
+			// Invariant: tempa[beginHalf1..index-1] is in order
+			tempArray[index] = lines_lengths[beginHalf2];
+
+		// Copy the result back into the original array
+		for (index = first; index <= last; index++)
+			lines_lengths[index] = tempArray[index];
+	}
+
+	//////////////////////////////////////////////////////////////////////	
+		
+		//This method resets the window to the scrambled lines display
+		public void reset(){
+			if(scramble_lines != null)
+			{
+				//copying the old scrambled lines into lines_lengths
+				for (int i = 0; i < total_number_of_lines; i++)
+				{
+					lines_lengths[i] = scramble_lines[i] ;
+				}
+			//Drawing the now scrambled lines_lengths
+			paintComponent(this.getGraphics());
+		}
+			}
+		
+	
+		//This method colours the lines and prints the lines
+		public void paintComponent(Graphics g){
+ 			super.paintComponent(g);
+			//A loop to assign a colour to each line
+			for(int i = 0; i < total_number_of_lines; i++){
+				//using eight colours for the lines
+				if(i % 8 == 0){
+					g.setColor(Color.green);
+				} else if(i % 8 == 1){
+					g.setColor(Color.blue);
+				} else if(i % 8 == 2){
+					g.setColor(Color.yellow);
+				} else if(i%8 == 3){
+					g.setColor(Color.red);
+				} else if(i%8 == 4){
+					g.setColor(Color.black);
+				} else if(i%8 == 5){
+					g.setColor(Color.orange);
+				} else if(i%8 == 6){
+					g.setColor(Color.magenta);
+				} else
+					g.setColor(Color.gray);
+				
+				//Drawing the lines using the x and y-components 
+				g.drawLine(4*i + 25, 300, 4*i + 25, 300 - lines_lengths[i]);
+			}
+			
+		}
+		
+		//A delay method that pauses the execution for the milliseconds time given as a parameter
+		public void delay(int time){
+			try{
+	        	Thread.sleep(6);
+	        }catch(InterruptedException ie){
+	        	Thread.currentThread().interrupt();
+	        }
+		}
+	//////////////////////////////////////////////////////////////////////////////
+	public void insetionSort()
+	{
+		Calendar start = Calendar.getInstance();
+
+		int i, key;
+		do
+		 {
+			 for(i =0; i < total_number_of_lines; i++)
+			 {
+				 key = lines_lengths[i + 1];
+				 if (lines_lengths[i + 1] < lines_lengths[i]) {
+					 lines_lengths[i + 1] = lines_lengths[i];
+					 lines_lengths[i] = key;
+				 }
+				 paintComponent(this.getGraphics());
+			 }
+		 }while (lines_lengths[0] > lines_lengths[1]);
+
+		//getting the date and time when the selection sort ends
+		Calendar end = Calendar.getInstance();
+		//getting the time it took for the selection sort to execute
+		//subtracting the end time with the start time
+		SortGUI.selectionTime = end.getTime().getTime() - start.getTime().getTime();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	public void shellSort ()
+	 {
+		 int lenght =0;
+		 int gap = lenght / 2;
+
+		 while (gap > 0)
+		 {
+			 int j=0;
+
+			 for (int i= gap; i <total_number_of_lines; i++)
+			 {
+				int temp = lines_lengths[i];
+				for (j=i; j >= gap && lines_lengths[j-gap] > temp; j-=gap)
+				{
+					lines_lengths[j] = lines_lengths[j-gap];
+				}
+				lines_lengths[j] = temp;
+			 }
+			 gap = gap/2;
+		 }
+ 	 }
+//////////////////////////////////////////////////////////////////////////////
+	}
+
+
