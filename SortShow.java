@@ -341,15 +341,12 @@ public class SortShow extends JPanel {
 		Calendar start = Calendar.getInstance();
 
 		int i, key;
-//		do
-//		 {
 		for (i = 1; i < total_number_of_lines; i++) {
 			key = lines_lengths[i];
 			int j = i - 1;
 
 			paintComponent(this.getGraphics());
 
-//		 }while (lines_lengths[0] > lines_lengths[1]);
 		while (j >= 0 && lines_lengths[j] > key) {
 			lines_lengths[j + 1] = lines_lengths[j];
 			j = j - 1;
@@ -367,24 +364,29 @@ public class SortShow extends JPanel {
 	//////////////////////////////////////////////////////////////////////////////
 	public void ShellSort ()
 	 {
-		 int lenght =0;
-		 int gap = lenght / 2;
+		 Calendar start = Calendar.getInstance();
+	int gap = total_number_of_lines/2;
+	while (gap > 0)
+	{
+		for (int i = gap; i < total_number_of_lines; i++)
+		{
+			int temp = lines_lengths[i];
+			int j;
+			for (j= i; j >= gap && lines_lengths[j - gap] > temp; j -=gap)
+			{
+				lines_lengths[j] = lines_lengths[j-gap];
+			}
+			lines_lengths[j] = temp;
+		}
+		gap /=2;
+	}
+			 paintComponent(this.getGraphics());
 
-		 while (gap > 0)
-		 {
-			 int j=0;
-
-			 for (int i= gap; i <total_number_of_lines; i++)
-			 {
-				int temp = lines_lengths[i];
-				for (j=i; j >= gap && lines_lengths[j-gap] > temp; j-=gap)
-				{
-					lines_lengths[j] = lines_lengths[j-gap];
-				}
-				lines_lengths[j] = temp;
-			 }
-			 gap = gap/2;
-		 }
+		 //getting the date and time when the selection sort ends
+		 Calendar end = Calendar.getInstance();
+		 //getting the time it took for the selection sort to execute
+		 //subtracting the end time with the start time
+		 SortGUI.shellTime = end.getTime().getTime() - start.getTime().getTime();
  	 }
 //////////////////////////////////////////////////////////////////////////////
 	}
