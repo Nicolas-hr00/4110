@@ -17,7 +17,7 @@ public class SortShow extends JPanel {
 	// An array to hold the lines_lengths to be sorted
 	public int[] lines_lengths;
 	//The amount of lines needed
-	public final int total_number_of_lines = 160;
+	public final int total_number_of_lines = 256;
 	// An array to holds the scrambled lines_lengths
 	public int[] scramble_lines;
 	//A temp Array that is used later for sorts
