@@ -1,6 +1,6 @@
 /**
  *
- * @author Mahmoud Algharbawi and Nicholas Hidalgo
+ * @author Mahmoud Algharbawi and Nicolas Hidalgo
  */
 
 //importing the libraries that will be needed in this program

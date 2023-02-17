@@ -1,6 +1,6 @@
 /**
  *
- * @author Ouda
+ * @author Mahmoud Algharbawi and Nicholas Hidalgo
  */
 
 //importing the libraries that will be needed in this program
@@ -338,7 +338,9 @@ public class SortShow extends JPanel {
 			Thread.currentThread().interrupt();
 		}
 	}
+
 	//////////////////////////////////////////////////////////////////////////////
+
 	public void InsetionSort() {
 		Calendar start = Calendar.getInstance();
 
@@ -370,24 +372,29 @@ public class SortShow extends JPanel {
 	//////////////////////////////////////////////////////////////////////////////
 	public void ShellSort ()
 	{
-		int lenght =0;
-		int gap = lenght / 2;
-
+		Calendar start = Calendar.getInstance();
+		int gap = total_number_of_lines/2;
 		while (gap > 0)
 		{
-			int j=0;
-
-			for (int i= gap; i <total_number_of_lines; i++)
+			for (int i = gap; i < total_number_of_lines; i++)
 			{
 				int temp = lines_lengths[i];
-				for (j=i; j >= gap && lines_lengths[j-gap] > temp; j-=gap)
+				int j;
+				for (j= i; j >= gap && lines_lengths[j - gap] > temp; j -=gap)
 				{
 					lines_lengths[j] = lines_lengths[j-gap];
 				}
 				lines_lengths[j] = temp;
 			}
-			gap = gap/2;
+			gap /=2;
 		}
+		paintComponent(this.getGraphics());
+
+		//getting the date and time when the selection sort ends
+		Calendar end = Calendar.getInstance();
+		//getting the time it took for the selection sort to execute
+		//subtracting the end time with the start time
+		SortGUI.shellTime = end.getTime().getTime() - start.getTime().getTime();
 	}
 //////////////////////////////////////////////////////////////////////////////
 }
