@@ -1,3 +1,10 @@
+/**
+ *
+ * @author Ouda
+ */
+
+//importing the libraries that will be needed in this program
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
@@ -10,7 +17,7 @@ public class SortShow extends JPanel {
 	// An array to hold the lines_lengths to be sorted
 	public int[] lines_lengths;
 	//The amount of lines needed
-	public final int total_number_of_lines = 256;
+	public final int total_number_of_lines = 160;
 	// An array to holds the scrambled lines_lengths
 	public int[] scramble_lines;
 	//A temp Array that is used later for sorts
@@ -330,33 +337,35 @@ public class SortShow extends JPanel {
 		}
 	}
 	//////////////////////////////////////////////////////////////////////////////
-	public void InsetionSort()
-	{
+	public void InsetionSort() {
 		Calendar start = Calendar.getInstance();
 
 		int i, key;
-		do
-		{
-			for(i =0; i < total_number_of_lines - 1 ; i++)
-			{
-				key = lines_lengths[i + 1];
-				if (lines_lengths[i + 1] < lines_lengths[i]) {
-					lines_lengths[i + 1] = lines_lengths[i];
-					lines_lengths[i] = key;
-				}
-				paintComponent(this.getGraphics());
+//		do
+//		 {
+		for (i = 1; i < total_number_of_lines; i++) {
+			key = lines_lengths[i];
+			int j = i - 1;
+
+			paintComponent(this.getGraphics());
+
+//		 }while (lines_lengths[0] > lines_lengths[1]);
+			while (j >= 0 && lines_lengths[j] > key) {
+				lines_lengths[j + 1] = lines_lengths[j];
+				j = j - 1;
 			}
-		}while (lines_lengths[0] > lines_lengths[1]);
+			lines_lengths[j + 1] = key;
+		}
 
 		//getting the date and time when the selection sort ends
 		Calendar end = Calendar.getInstance();
 		//getting the time it took for the selection sort to execute
 		//subtracting the end time with the start time
-		SortGUI.selectionTime = end.getTime().getTime() - start.getTime().getTime();
+		SortGUI.insertionTime = end.getTime().getTime() - start.getTime().getTime();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
-	public void shellSort ()
+	public void ShellSort ()
 	{
 		int lenght =0;
 		int gap = lenght / 2;
@@ -379,4 +388,3 @@ public class SortShow extends JPanel {
 	}
 //////////////////////////////////////////////////////////////////////////////
 }
-
