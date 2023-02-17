@@ -17,7 +17,7 @@ public class SortShow extends JPanel {
 	// An array to hold the lines_lengths to be sorted
 	public int[] lines_lengths;
 	//The amount of lines needed
-	public final int total_number_of_lines = 256;
+	public final int total_number_of_lines = 128;
 	// An array to holds the scrambled lines_lengths
 	public int[] scramble_lines;
 	//A temp Array that is used later for sorts
@@ -114,7 +114,7 @@ public class SortShow extends JPanel {
 		//getting the date and time when the recursive merge sort starts
 		Calendar start = Calendar.getInstance();
 		//assigning the size for the tempArray below
-
+		R_MergeSort(0,total_number_of_lines-1);
 		//You need to complete this part.
 		Calendar end = Calendar.getInstance();
 		//getting the time it took for the iterative merge sort to execute
@@ -125,13 +125,24 @@ public class SortShow extends JPanel {
 
 	//recursive merge sort method
 	public void R_MergeSort(int first, int last){
-		if(first < last){
+		//getting the date and time when the iterative merge sort starts
+		Calendar start = Calendar.getInstance();
 
-			//You need to complete this part.
+		if(first < last){
+			int mid = (first + last)/2;
+			R_MergeSort(first,mid);
+			R_MergeSort(mid+1,last);
+			R_Merge(first,mid,last);
 
 			//Causing a delay for 10ms
-			delay(10);
+			delay(2);
 		}
+
+		//getting the date and time when the iterative merge sort ends
+		Calendar end = Calendar.getInstance();
+		//getting the time it took for the iterative merge sort to execute
+		//subtracting the end time with the start time
+		SortGUI.rmergeTime = end.getTime().getTime() - start.getTime().getTime();
 	}
 
 
@@ -139,6 +150,44 @@ public class SortShow extends JPanel {
 	public void R_Merge(int first, int mid, int last){
 
 		//You need to complete this part.
+		int beginHalf1 = first;
+		int endHalf1 = mid;
+		int beginHalf2 = mid + 1;
+		int endHalf2 = last;
+		int index = beginHalf1;
+		//assigning the size for the tempArray below
+		tempArray = new int[total_number_of_lines];
+		//saving the value of total_number_of_lines
+
+
+		while ((beginHalf1 <= endHalf1) && (beginHalf2 <= endHalf2)){
+			if(lines_lengths[beginHalf1] < lines_lengths[beginHalf2]){
+				tempArray[index] = lines_lengths[beginHalf1];
+				beginHalf1++;
+			}else{
+				tempArray[index] = lines_lengths[beginHalf2];
+				beginHalf2++;
+			}
+			index++;
+
+		}
+
+		//redrawing the lines_lengths
+		paintComponent(this.getGraphics());
+
+		// Finish off the first sub-array, if necessary
+		for (; beginHalf1 <= endHalf1; beginHalf1++, index++)
+			// Invariant: tempArray[beginHalf1..index-1] is in order
+			tempArray[index] = lines_lengths[beginHalf1];
+
+		// Finish off the second sub-array, if necessary
+		for (; beginHalf2 <= endHalf2; beginHalf2++, index++)
+			// Invariant: tempa[beginHalf1..index-1] is in order
+			tempArray[index] = lines_lengths[beginHalf2];
+
+		// Copy the result back into the original array
+		for (index = first; index <= last; index++)
+			lines_lengths[index] = tempArray[index];
 
 	}
 
