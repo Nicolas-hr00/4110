@@ -397,4 +397,20 @@ public class SortShow extends JPanel {
 		SortGUI.shellTime = end.getTime().getTime() - start.getTime().getTime();
 	}
 //////////////////////////////////////////////////////////////////////////////
+
+	//Bubble Sort Method
+	public void QuickSort() {
+		//getting the date and time when the bubblee sort starts
+		Calendar start = Calendar.getInstance();
+		//assigning the size for the tempArray below
+
+
+		Calendar end = Calendar.getInstance();
+		//getting the time it took for the bubble sort to execute
+		//subtracting the end time with the start time
+		SortGUI.quickTime = end.getTime().getTime() - start.getTime().getTime();
+	}
+
+
+
 }
