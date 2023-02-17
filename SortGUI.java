@@ -190,17 +190,17 @@ public class SortGUI {
 				}
 			});
 
-			//Creating an action listener for bubble button
+			//Creating an action listener for insertion button
 			insertion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//Sorting the array in the selection sort method
-					sortArea.insetionSort();
+					sortArea.InsetionSort();
 					//Selection sort has finished/been clicked
-					Bubble_Done = true;
+					Insertion_Done = true;
 					//The amount of time taken for selection sort took
-					bubble_time_taken.setText((insertionTime / 1000) + " Seconds");
+					insertion_time_taken.setText((insertionTime / 1000) + " Seconds");
 					//setting all booleans false except for reset
-					Set_Available_Chooses(false, false, false, true,true,true);
+					Set_Available_Chooses(false, false, false, true,false,true);
 				}
 			});
 
