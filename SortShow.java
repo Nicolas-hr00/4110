@@ -1,3 +1,10 @@
+/**
+ *
+ * @author Ouda
+ */
+
+//importing the libraries that will be needed in this program
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
@@ -330,33 +337,35 @@ public class SortShow extends JPanel {
 	        }
 		}
 	//////////////////////////////////////////////////////////////////////////////
-	public void insetionSort()
-	{
+	public void InsetionSort() {
 		Calendar start = Calendar.getInstance();
 
 		int i, key;
-		do
-		 {
-			 for(i =0; i < total_number_of_lines; i++)
-			 {
-				 key = lines_lengths[i + 1];
-				 if (lines_lengths[i + 1] < lines_lengths[i]) {
-					 lines_lengths[i + 1] = lines_lengths[i];
-					 lines_lengths[i] = key;
-				 }
-				 paintComponent(this.getGraphics());
-			 }
-		 }while (lines_lengths[0] > lines_lengths[1]);
+//		do
+//		 {
+		for (i = 1; i < total_number_of_lines; i++) {
+			key = lines_lengths[i];
+			int j = i - 1;
+
+			paintComponent(this.getGraphics());
+
+//		 }while (lines_lengths[0] > lines_lengths[1]);
+		while (j >= 0 && lines_lengths[j] > key) {
+			lines_lengths[j + 1] = lines_lengths[j];
+			j = j - 1;
+		}
+		lines_lengths[j + 1] = key;
+	}
 
 		//getting the date and time when the selection sort ends
 		Calendar end = Calendar.getInstance();
 		//getting the time it took for the selection sort to execute
 		//subtracting the end time with the start time
-		SortGUI.selectionTime = end.getTime().getTime() - start.getTime().getTime();
+		SortGUI.insertionTime = end.getTime().getTime() - start.getTime().getTime();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
-	public void shellSort ()
+	public void ShellSort ()
 	 {
 		 int lenght =0;
 		 int gap = lenght / 2;
@@ -379,5 +388,3 @@ public class SortShow extends JPanel {
  	 }
 //////////////////////////////////////////////////////////////////////////////
 	}
-
-
