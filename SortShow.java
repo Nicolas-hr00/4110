@@ -214,17 +214,19 @@ public class SortShow extends JPanel {
 		//getting the date and time when the bubblee sort starts
 		Calendar start = Calendar.getInstance();
 		//assigning the size for the tempArray below
+		for (int i = 0; i < total_number_of_lines - 1; i++){
+			for (int j = 0; j < total_number_of_lines - i - 1; j++){
+				paintComponent(this.getGraphics());
+				if(lines_lengths[j] > lines_lengths[j+1]){
+					swap(j,j+1);
+				}
+			}
+		}
 
-
-
-
-
-
-		//You need to complete this part.
 		Calendar end = Calendar.getInstance();
 		//getting the time it took for the bubble sort to execute
 		//subtracting the end time with the start time
-		SortGUI.rmergeTime = end.getTime().getTime() - start.getTime().getTime();
+		SortGUI.bubbleTime = end.getTime().getTime() - start.getTime().getTime();
 	}
 
 
@@ -347,7 +349,7 @@ public class SortShow extends JPanel {
 			key = lines_lengths[i];
 			int j = i - 1;
 
-			paintComponent(this.getGraphics());
+
 
 //		 }while (lines_lengths[0] > lines_lengths[1]);
 			while (j >= 0 && lines_lengths[j] > key) {
@@ -355,6 +357,7 @@ public class SortShow extends JPanel {
 				j = j - 1;
 			}
 			lines_lengths[j + 1] = key;
+			paintComponent(this.getGraphics());
 		}
 
 		//getting the date and time when the selection sort ends
