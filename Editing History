@@ -1,0 +1,13 @@
+Changed screen size in SortGui
+
+1- For adding sorts GUI
+    added time variable and boolean variable in class SortGui
+    added radio button and label MyScreen class that extends JFrame
+    added red color for bubble time taken and blue for bubble in default constructor for MyClass
+    added 1 more rows for the radio selection table then added bubble button
+    added 2 more rows for the time panel table then added bubble time taken and label variables
+    updated the Set_Available_Chooses function parameters and added state in function then updated all other function calls
+    added actionListener and created bubble sort function in SortShow.java
+    filled bubble sort function with calender start and end
+    update the reset actionlistener and the if statements
+
